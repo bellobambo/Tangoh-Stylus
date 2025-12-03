@@ -1,4 +1,5 @@
-#![cfg_attr(not(feature = "export-abi"), no_main)]
+#![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
+
 extern crate alloc;
 
 use stylus_sdk::{
@@ -317,5 +318,114 @@ impl CollegeFundraiser {
             return Err(NotAuthorized{}.abi_encode());
         }
         Ok(())
+    }
+}
+
+
+
+// Test
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use stylus_sdk::testing::*;
+    use alloy_primitives::{address, uint};
+
+    // Helper to setup the VM and Contract
+    fn setup() -> (TestVM, CollegeFundraiser) {
+        let vm = TestVM::default();
+        let mut contract = CollegeFundraiser::from(&vm);
+        
+        // Mock addresses
+        let owner = address!("0000000000000000000000000000000000000001");
+        let escrow = address!("0000000000000000000000000000000000000002");
+        let fee = uint!(100_U256);
+
+        // Explicitly set the sender to 'owner' so the init function works as expected
+        // Note: In unit tests, we generally simulate the logic. 
+        // The default msg_sender in TestVM is usually 0x0...0
+        
+        // Initialize the contract
+        // We ignore the Result unwrapping here for setup, assuming it passes
+        let _ = contract.init(escrow, fee);
+
+        (vm, contract)
+    }
+
+    #[test]
+    fn test_initialization() {
+        let (_vm, contract) = setup();
+
+        // Check if ticket count started at 0
+        assert_eq!(contract.ticket_count.get(), U256::ZERO);
+
+        // Check if reopen fee was set correctly
+        assert_eq!(contract.reopen_fee.get(), uint!(100_U256));
+    }
+
+    #[test]
+    fn test_create_ticket() {
+        let (_vm, mut contract) = setup();
+
+        let description = "Fund Solar Panels".to_string();
+        
+        // Call the create_ticket function
+        let ticket_id_result = contract.create_ticket(description.clone());
+        
+        assert!(ticket_id_result.is_ok());
+        let ticket_id = ticket_id_result.unwrap();
+
+        // Assert ticket ID is 0 (since it's the first one)
+        assert_eq!(ticket_id, U256::ZERO);
+
+        // Verify state changes
+        assert_eq!(contract.ticket_count.get(), uint!(1_U256));
+
+        // Verify Ticket Data
+        let stored_ticket = contract.tickets.getter(ticket_id);
+        assert_eq!(stored_ticket.description.get_string(), description);
+        assert_eq!(stored_ticket.status.get(), U8::from(STATUS_PENDING));
+    }
+
+    #[test]
+    fn test_voting_logic() {
+        let (_vm, mut contract) = setup();
+
+        // Create a ticket first
+        contract.create_ticket("Library Books".to_string()).unwrap();
+        let ticket_id = U256::ZERO;
+
+        // Vote Up
+        contract.vote(ticket_id, true).unwrap();
+        let ticket = contract.tickets.getter(ticket_id);
+        assert_eq!(ticket.votes.get(), I256::try_from(1).unwrap());
+
+        // Vote Down
+        contract.vote(ticket_id, false).unwrap();
+        let ticket = contract.tickets.getter(ticket_id);
+        assert_eq!(ticket.votes.get(), I256::ZERO); // 1 - 1 = 0
+    }
+
+#[test]
+    fn test_user_registration() {
+        let vm = TestVM::default();
+        let mut contract = CollegeFundraiser::from(&vm);
+
+        let name = "Alice".to_string();
+        let student_id = "ST12345".to_string();
+        
+        // 1. Register as student (role 0)
+        contract.register_user(name.clone(), student_id.clone(), 0).unwrap();
+
+        // 2. Ask the VM who the current sender is
+        // The compiler error told us this method exists!
+        let sender = vm.msg_sender();
+
+        // 3. Retrieve the user using the actual sender address
+        let user = contract.users.getter(sender);
+        
+        // 4. Assertions
+        assert_eq!(user.name.get_string(), name);
+        assert_eq!(user.id.get_string(), student_id);
+        assert_eq!(user.role.get(), U8::from(0));
     }
 }
