@@ -212,3 +212,26 @@ Where you can find `YOUR_ARCHITECTURE` by running `rustc -vV | grep host`. For M
 ## License
 
 This project is fully open source, including an Apache-2.0 or MIT license at your choosing under your own copyright.
+
+
+## Deployment
+
+
+deployed code at address: 0xbf16c7ca893c075758bc18f66d5a993372a6914d
+deployment tx hash: 0xb79550e86293ae6485da3f9ac6cb5d06f62c4d30259379ef4603ea069fe56e22
+contract activated and ready onchain with tx hash: 0x1bd06218341a8780a6c510589526b2d0dbc1c194b60ced3d976d5251bcbdd264
+
+
+
+bambo@BBambo:~/Tangoh$ cargo stylus cache bid \
+  --private-key-path=./key.txt \
+  --endpoint='https://sepolia-rollup.arbitrum.io/rpc' \
+  0xbf16c7ca893c075758bc18f66d5a993372a6914d \
+  0
+
+  
+Checking if contract can be cached...
+Sending cache bid tx...
+Successfully cached contract at address: 0xbf16c7cA893c075758bc18f66d5A993372A6914d
+Sent Stylus cache bid tx with hash: 0x642ca138d5016dd77326ebc62bf96fa43e3dbf002cc11bdfc033802adac5a3ad
+bambo@BBambo:~/Tangoh$ 
