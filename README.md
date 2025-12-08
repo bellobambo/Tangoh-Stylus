@@ -217,26 +217,22 @@ This project is fully open source, including an Apache-2.0 or MIT license at you
 ## Deployment
 
 
-deployed code at address: 0xbf16c7ca893c075758bc18f66d5a993372a6914d
-deployment tx hash: 0xb79550e86293ae6485da3f9ac6cb5d06f62c4d30259379ef4603ea069fe56e22
-contract activated and ready onchain with tx hash: 0x1bd06218341a8780a6c510589526b2d0dbc1c194b60ced3d976d5251bcbdd264
+deployed code at address: 0xcdfb1272fad230337c553e8c5649d5c5cf361f03
+deployment tx hash: 0xf0fd5a090fbe5f881c1f01c0a57f18167e0f98241c4f4fdd293d940cc2cedbbe
 
 
-
-bambo@BBambo:~/Tangoh$ cargo stylus cache bid \
+cargo stylus cache bid \
   --private-key-path=./key.txt \
   --endpoint='https://sepolia-rollup.arbitrum.io/rpc' \
-  0xbf16c7ca893c075758bc18f66d5a993372a6914d \
+  0xcdfb1272fad230337c553e8c5649d5c5cf361f03 \
   0
 
+
+Successfully cached contract at address: 0xcDFb1272Fad230337C553e8c5649d5C5cf361f03
+Sent Stylus cache bid tx with hash: 0x025ee01a85c3e96af77ddc7a5ccba0976be2b3b1fdf02ea67dab62f236166f63
+bambo@BBambo:~/Tangoh$ 
   
 
-
-Checking if contract can be cached...
-Sending cache bid tx...
-Successfully cached contract at address: 0xbf16c7cA893c075758bc18f66d5A993372A6914d
-Sent Stylus cache bid tx with hash: 0x642ca138d5016dd77326ebc62bf96fa43e3dbf002cc11bdfc033802adac5a3ad
-bambo@BBambo:~/Tangoh$ 
 
 
 
@@ -266,9 +262,13 @@ interface ICollegeFundraiser  {
 
     function markProjectComplete(uint256 ticket_id) external;
 
+    function acknowledgeTicket(uint256 ticket_id) external;
+
     function fundTicket(uint256 ticket_id) external payable;
 
-    function getTicket(uint256 ticket_id) external view returns (address, address, bytes32, bytes32, int256, uint256, uint256, uint8);
+    function getTicket(uint256 ticket_id) external view returns (address, address, bytes32, bytes32, int256, uint256, uint256, uint8, bool);
+
+    function hasVoted(uint256 ticket_id, address user) external view returns (bool);
 
     function getUser(address user_address) external view returns (bytes32, uint8);
 
@@ -278,3 +278,4 @@ interface ICollegeFundraiser  {
 
     function getOwner() external view returns (address);
 }
+bambo@BBambo:~/Tangoh$ 
