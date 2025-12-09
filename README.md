@@ -2,6 +2,7 @@
 
 
 **Contract Address:** `0xcDFb1272Fad230337C553e8c5649d5C5cf361f03`  
+**Escrow Account:** `0x323d8ee95b5e81bf21d05237ac1501c41328ba50`  
 **Network:** Arbitrum Stylus
 
 ## 📖 Overview
