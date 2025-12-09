@@ -57,5 +57,5 @@ This isn't just technology - it's a better way for students and campus authoriti
 
 
 ## Smart Contract:
-[https://github.com/bellobambo/Tangoh-Stylus
+[https://github.com/bellobambo/Tangoh-FE
 ](https://github.com/bellobambo/Tangoh-FE)
