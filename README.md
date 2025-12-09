@@ -54,3 +54,8 @@ When authorities fix a problem, the student who reported it can confirm the solu
 ## 💡 Why It Matters
 
 This isn't just technology - it's a better way for students and campus authorities to work together. It replaces frustration with collaboration, complaints with solutions, and silence with productive conversation.
+
+
+## Smart Contract:
+[https://github.com/bellobambo/Tangoh-Stylus
+](https://github.com/bellobambo/Tangoh-FE)
